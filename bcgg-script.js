@@ -32,7 +32,7 @@ let score = 0;
 
 document.getElementById('start-game').addEventListener('click', startGame);
 document.getElementById('restart-game').addEventListener('click', restartGame);
-document.getElementById('nextClue').addEventListener('click', nextClue);
+document.getElementById('next-clue').addEventListener('click', nextClue);
 
 function startGame() {
     document.getElementById('start-screen').classList.add('hidden');
@@ -47,25 +47,25 @@ function resetGame() {
     currentClueIndex = 0;
     score = 0;
     document.getElementById('feedback').textContent = '';
-    document.getElementById('clue1').display = "block";
-    document.getElementById('clue2').display = "block";
-    document.getElementById('clue3').display = "block";
-    document.getElementById('clue1').textContent = clue1;
-    document.getElementById('clue2').textContent = clue2;
-    document.getElementById('clue3').textContent = clue3;
+    document.getElementById('game-clue1').display = "block";
+    document.getElementById('game-clue2').display = "block";
+    document.getElementById('game-clue3').display = "block";
+    document.getElementById('game-clue1').textContent = clue1;
+    document.getElementById('game-clue2').textContent = clue2;
+    document.getElementById('game-clue3').textContent = clue3;
     clearChoices();
 }
 
 function showClue(n){
     switch n { 
        case 1: 
-          document.getElementById('clue1').display = "none";
+          document.getElementById('game-clue1').display = "none";
           break;
        case 2: 
-          document.getElementById('clue2').display = "none";
+          document.getElementById('game-clue2').display = "none";
           break;
        case 3: 
-          document.getElementById('clue1').display = "none";
+          document.getElementById('game-clue1').display = "none";
     }
 }
 
