@@ -46,18 +46,16 @@ function resetGame() {
     currentCharacterIndex = 0;
     currentClueIndex = 0;
     score = 0;
-    document.getElementById('feedback').textContent = '';
-    document.getElementById('game-clue1').display = "block";
-    document.getElementById('game-clue2').display = "block";
-    document.getElementById('game-clue3').display = "block";
-    document.getElementById('game-clue1').textContent = clue1;
-    document.getElementById('game-clue2').textContent = clue2;
-    document.getElementById('game-clue3').textContent = clue3;
+    document.getElementById('quest-feedback').textContent = '';
     clearChoices();
+    document.getElementById('quest-clue1').display = "block";
+    document.getElementById('quest-clue2').display = "block";
+    document.getElementById('quest-clue3').display = "block";
+
 }
 
 function showClue(n){
-    switch n { 
+    switch(n) { 
        case 1: 
           document.getElementById('game-clue1').display = "none";
           break;
@@ -72,13 +70,24 @@ function showClue(n){
 
 function nextClue() {
     currentClueIndex++;
-    showClue(currentClueIndex);
+    if (currentClueIndex <= 3) {
+        showClue(currentClueIndex);
+    } else {
+        currentClueIndex = 0;
+        currentCharacterIndex++;
+        if (currentCharacterIndex < characters.length) {
+            resetGame();  // Proceed to the next character
+        } else {
+            endGame();  // End the game if no more characters
+        }
+    }
 }
+
 
 function showChoices() {
     const correctAnswer = characters[currentCharacterIndex].name;
     const allAnswers = getRandomChoices(correctAnswer);
-    const choicesContainer = document.getElementById('choices');
+    const choicesContainer = document.getElementById('quest-choices'); 
     
     clearChoices();
 
@@ -91,10 +100,14 @@ function showChoices() {
     });
 }
 
+
 function getRandomChoices(correctAnswer) {
     const answers = characters.map(character => character.name);
     const randomChoices = [correctAnswer];
-    
+
+    document.getElementById('quest-clue1').textContent = character.clue1;
+    document.getElementById('quest-clue2').textContent = character.clue2;
+    document.getElementById('quest-clue3').textContent = character.clue3;
     while (randomChoices.length < 4) {
         const randomAnswer = answers[Math.floor(Math.random() * answers.length)];
         if (!randomChoices.includes(randomAnswer)) {
@@ -111,22 +124,22 @@ function submitGuess(selectedAnswer) {
 
     if (selectedAnswer === correctAnswer) {
         score++;
-        document.getElementById('feedback').textContent = 'Correct!';
+        document.getElementById('quest-feedback').textContent = 'Correct!';
     } else {
-        document.getElementById('feedback').textContent = `Incorrect! The correct answer was ${correctAnswer}.`;
+        document.getElementById('quest-feedback').textContent = `Incorrect! The correct answer was ${correctAnswer}.`;
     }
 
     // Move to the next clue or character
     //currentClueIndex++;
 
     setTimeout(() => {
-        if (currentClueIndex < characters[currentCharacterIndex].clues.length) {
-            showClue();
+        if (currentClueIndex < 3) {  // There are 3 clues
+            showClue(currentClueIndex);
         } else {
             currentCharacterIndex++;
             currentClueIndex = 0;
             if (currentCharacterIndex < characters.length) {
-                showClue();
+                resetGame();
             } else {
                 endGame();
             }
@@ -135,7 +148,7 @@ function submitGuess(selectedAnswer) {
 }
 
 function clearChoices() {
-    const choicesContainer = document.getElementById('choices');
+    const choicesContainer = document.getElementById('quest-choices');
     choicesContainer.innerHTML = '';
 }
 
